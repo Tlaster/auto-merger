@@ -1,11 +1,13 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'auto-merger'
+description: 'Automatically merge PR when all approved and ready'
+author: 'Tlaster'
 inputs:
-  milliseconds: # change this
-    required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  ready_label:
+    description: 'label to add to PR when ready for review'
+    default: 'ready'
+  approved_label:
+    description: 'label to add to PR when all approved'
+    default: 'approved'
 runs:
   using: 'node16'
   main: 'dist/index.js'
