@@ -31,7 +31,25 @@ async function run(): Promise<void> {
       })
 
       if (pullRequestDetails.mergeable) {
-        // merge the pull request
+        // check if all checks are successful
+        const { data: checks } = await octokit.rest.checks.listForRef({
+          owner: github.context.repo.owner,
+          repo: github.context.repo.repo,
+          ref: pullRequest.head.ref,
+        })
+
+        // if there are no checks, skip the pull request
+        if (checks.total_count === 0) continue
+
+        // if there are checks, check if all of them are successful
+        const allChecksSuccessful = checks.check_runs.every(
+          (check) => check.conclusion === 'success'
+        )
+
+        // if not all checks are successful, skip the pull request
+        if (!allChecksSuccessful) continue
+
+        // if all checks are successful, merge the pull request
         await octokit.rest.pulls.merge({
           owner: github.context.repo.owner,
           repo: github.context.repo.repo,
