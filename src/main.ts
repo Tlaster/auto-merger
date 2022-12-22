@@ -7,6 +7,7 @@ async function run(): Promise<void> {
     const octokit = github.getOctokit(token)
     const readyLabel = core.getInput('ready_label')
     const approvedLabel = core.getInput('approved_label')
+    let merged = false
 
     // get all pull requests for the repo
     const { data: pullRequests } = await octokit.rest.pulls.list({
@@ -55,7 +56,15 @@ async function run(): Promise<void> {
           repo: github.context.repo.repo,
           pull_number: pullRequest.number,
         })
+        merged = true
       }
+    }
+
+    if (merged) {
+      core.info('Pull requests merged')
+      core.setOutput('merged', 'true')
+    } else {
+      core.info('No pull requests to merge')
     }
 
   } catch (error) {

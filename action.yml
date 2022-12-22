@@ -11,6 +11,9 @@ inputs:
   approved_label:
     description: 'label to add to PR when all approved'
     default: 'approved'
+outputs:
+  merged:
+    description: "PR merged or not"
 runs:
   using: 'node16'
   main: 'dist/index.js'
