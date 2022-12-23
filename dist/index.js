@@ -72,13 +72,17 @@ function run() {
                         ref: pullRequest.head.ref,
                     });
                     // if there are no checks, skip the pull request
-                    if (checks.total_count === 0)
+                    if (checks.total_count === 0) {
+                        core.info(`Pull request #${pullRequest.number} has no checks. Skipping.`);
                         continue;
+                    }
                     // if there are checks, check if all of them are successful
                     const allChecksSuccessful = checks.check_runs.every((check) => check.conclusion === 'success');
                     // if not all checks are successful, skip the pull request
-                    if (!allChecksSuccessful)
+                    if (!allChecksSuccessful) {
+                        core.info(`Pull request #${pullRequest.number} has failing checks. Skipping.`);
                         continue;
+                    }
                     // if all checks are successful, merge the pull request
                     yield octokit.rest.pulls.merge({
                         owner: github.context.repo.owner,
@@ -86,6 +90,9 @@ function run() {
                         pull_number: pullRequest.number,
                     });
                     merged = true;
+                }
+                else {
+                    core.info(`Pull request #${pullRequest.number} is not mergeable. Skipping.`);
                 }
             }
             if (merged) {
