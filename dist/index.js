@@ -74,6 +74,7 @@ function run() {
                     // if there are no checks, skip the pull request
                     if (checks.total_count === 0) {
                         core.info(`Pull request #${pullRequest.number} has no checks. Skipping.`);
+                        core.debug(JSON.stringify(checks));
                         continue;
                     }
                     // if there are checks, check if all of them are successful
@@ -81,6 +82,7 @@ function run() {
                     // if not all checks are successful, skip the pull request
                     if (!allChecksSuccessful) {
                         core.info(`Pull request #${pullRequest.number} has failing checks. Skipping.`);
+                        core.debug(JSON.stringify(checks));
                         continue;
                     }
                     // if all checks are successful, merge the pull request
@@ -93,6 +95,7 @@ function run() {
                 }
                 else {
                     core.info(`Pull request #${pullRequest.number} is not mergeable. Skipping.`);
+                    core.debug(JSON.stringify(pullRequestDetails));
                 }
             }
             if (merged) {

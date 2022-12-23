@@ -44,6 +44,7 @@ async function run(): Promise<void> {
           core.info(
             `Pull request #${pullRequest.number} has no checks. Skipping.`
           )
+          core.debug(JSON.stringify(checks))
           continue
         }
 
@@ -57,6 +58,7 @@ async function run(): Promise<void> {
           core.info(
             `Pull request #${pullRequest.number} has failing checks. Skipping.`
           )
+          core.debug(JSON.stringify(checks))
           continue
         }
 
@@ -71,6 +73,7 @@ async function run(): Promise<void> {
         core.info(
           `Pull request #${pullRequest.number} is not mergeable. Skipping.`
         )
+        core.debug(JSON.stringify(pullRequestDetails))
       }
     }
 
