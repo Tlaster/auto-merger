@@ -48,9 +48,14 @@ async function run(): Promise<void> {
           continue
         }
 
+        // filter out the checks that are cancelled
+        const filteredChecks = checks.check_runs.filter(
+          (check) => check.status !== 'completed' || check.conclusion !== 'cancelled'
+        )
+
         // if there are checks, check if all of them are successful
-        const allChecksSuccessful = checks.check_runs.every(
-          (check) => check.conclusion === 'success'
+        const allChecksSuccessful = filteredChecks.every(
+          (check) => check.status === 'completed' && check.conclusion === 'success'
         )
 
         // if not all checks are successful, skip the pull request
